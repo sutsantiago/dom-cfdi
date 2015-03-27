@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cfdi:Comprobante xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="3.2" serie="TEST" folio="0001" fecha="2014-04-22T11:18:52" tipoDeComprobante="egreso" formaDePago="Pago en una sola exhibición" metodoDePago="No Identificado" noCertificado="0" subTotal="11613.91" descuento="1897.22" motivoDescuento="Deducciones nómina" total="9716.69" LugarExpedicion="ESTADO DE MEXICO" sello="" certificado="" xmlns:cfdi="http://www.sat.gob.mx/cfd/3" xsi:schemaLocation="http://www.sat.gob.mx/cfd/3 http://www.sat.gob.mx/sitio_internet/cfd/3/cfdv32.xsd">
+  <cfdi:Emisor rfc="123456789123" nombre="PATITO, S. A. DE C. V.">
+    <cfdi:DomicilioFiscal calle="MEXICO" noExterior="1" noInterior="2" colonia="MEXICO" municipio="ATIZAPAN" estado="ESTADO DE MEXICO" pais="MEXICO" codigoPostal="00000" />
+    <cfdi:ExpedidoEn calle="MEXICO" noExterior="1" noInterior="2" colonia="MEXICO" municipio="ATIZAPAN" estado="ESTADO DE MEXICO" pais="MEXICO" codigoPostal="00000" />
+    <cfdi:RegimenFiscal Regimen="Régimen General de Ley Personas Morales" />
+  </cfdi:Emisor>
+  <cfdi:Receptor rfc="1234567891234" nombre="THOM CRUZ">
+    <cfdi:Domicilio calle="AV. HIDALGO S/N" colonia="LAS LILAS" municipio="XOCHITL" estado="HIDALGO" pais="MEXICO" codigoPostal="00000" />
+  </cfdi:Receptor>
+  <cfdi:Conceptos>
+    <cfdi:Concepto cantidad="1.00" unidad="SERVICIO" descripcion="QUINCENAL" valorUnitario="9716.69" importe="9716.69" />
+  </cfdi:Conceptos>
+  <cfdi:Impuestos totalImpuestosRetenidos="1801.00" />
+  <cfdi:Complemento>
+    <nomina:Nomina xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Version="1.1" RegistroPatronal="12345678123" NumEmpleado="1" CURP="AAAA000000BBBBBB00" TipoRegimen="2" NumSeguridadSocial="12345678912" FechaPago="2014-01-29" FechaInicialPago="2014-01-16" FechaFinalPago="2014-01-31" NumDiasPagados="15.00" Departamento="RH" FechaInicioRelLaboral="2012-03-01" Antiguedad="101" Puesto="Trabajo en campamento" TipoContrato="EVENTUAL" TipoJornada="MIXTA" PeriodicidadPago="QUINCENAL" SalarioBaseCotApor="260.26" RiesgoPuesto="3" xmlns:nomina="http://www.sat.gob.mx/nomina" xsi:schemaLocation="http://www.sat.gob.mx/nomina http://www.sat.gob.mx/sitio_internet/cfd/nomina/nomina11.xsd">
+      <nomina:Percepciones TotalGravado="10831.93" TotalExento="781.98">
+        <nomina:Percepcion Clave="0001" TipoPercepcion="001" Concepto="SUELDO" ImporteGravado="3475.50" ImporteExento="0.00" />
+        <nomina:Percepcion Clave="0008" TipoPercepcion="019" Concepto="TIEMPO EXTRA" ImporteGravado="260.66" ImporteExento="260.66" />
+        <nomina:Percepcion Clave="0009" TipoPercepcion="019" Concepto="TIEMPO EXTRA TRIPLE" ImporteGravado="434.43" ImporteExento="0.00" />
+        <nomina:Percepcion Clave="0010" TipoPercepcion="038" Concepto="DESCANSO TRABAJADO" ImporteGravado="810.95" ImporteExento="0.00" />
+      </nomina:Percepciones>
+      <nomina:Deducciones TotalGravado="0.00" TotalExento="96.22">
+        <nomina:Deduccion Clave="0101" TipoDeduccion="002" Concepto="I.S.P.T." ImporteGravado="0.00" ImporteExento="1801.00" />
+        <nomina:Deduccion Clave="0102" TipoDeduccion="001" Concepto="CUOTA I.M.S.S." ImporteGravado="0.00" ImporteExento="52.30" />
+        <nomina:Deduccion Clave="0103" TipoDeduccion="003" Concepto="C OBR SEG SOC" ImporteGravado="0.00" ImporteExento="43.92" />
+      </nomina:Deducciones>
+      <nomina:HorasExtras>
+        <nomina:HorasExtra Dias="3" TipoHoras="Dobles" HorasExtra="27" ImportePagado="1563.96" />
+        <nomina:HorasExtra Dias="5" TipoHoras="Triples" HorasExtra="57" ImportePagado="4952.55" />
+      </nomina:HorasExtras>
+    </nomina:Nomina>
+  </cfdi:Complemento>
+</cfdi:Comprobante>
