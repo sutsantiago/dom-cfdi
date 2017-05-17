@@ -134,4 +134,4 @@ def getDatosXml(path=None):
 
 
 #llamar funcion
-print(getDatosXml("cfdi_test.xml"))
+print(getDatosXml("CFDI_v11.xml"))
