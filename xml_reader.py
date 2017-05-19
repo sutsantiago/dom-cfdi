@@ -6,21 +6,6 @@ class Field(object):
 		self.attribute_name = attribute_name
 
 
-class Base(object):
-
-	def get_fields(self):
-		fields = []
-
-		for field in self.map_fields:
-			name = getattr(field, 'attribute_name')
-			fields.append(name)
-
-		return fields
-
-	def get_node(self):
-		return self.node
-		
-
 class XmlReader(object):
 	"""
 	Clase base de XML.
@@ -32,25 +17,21 @@ class XmlReader(object):
 	def get_file(self):
 		return self.document
 
-	def get_elements(self, document):
-		return document.getElementsByTagName(node)
+	def get_elements(self, node_xml):
+		return self.document.getElementsByTagName(node_xml)
 
-	def get_attributes(self, node_xml, fields):
-		node = self.get_elements(node_xml)
-
+	def get_data(self, node, fields):
 		data = {}
 		# Recorrer lista de atributos
 		for name in fields:
 			# Extraer datos con los nombres.
-			for item in node:
-				atribute = item.getAttribute(name)
+			for nd in node:
+				atribute = nd.getAttribute(name)
 			# Agregar a la lista 
 			data.update({name: atribute})
 		return data
 
-	def list_attributes(self, node_xml, fields):
-		nodes = self.get_elements(node_xml)
-		
+	def list_data(self, nodes, fields):
 		data = []
 		dic = {}
 		# Extraer datos del nodo.
@@ -63,6 +44,21 @@ class XmlReader(object):
 			# Agregar a la lista los diccionarios.
 			data.append(dic)
 		return data
+
+
+class Base(object):
+
+	def get_fields(self):
+		fields = []
+
+		for field in self.map_fields:
+			name = getattr(field, 'attribute_name')
+			fields.append(name)
+
+		return fields
+
+	def get_name_node(self):
+		return self.node
 
 
 class Comprobante(Base):
@@ -123,10 +119,12 @@ class ParseXml(object):
 
 	xml_reader = XmlReader(path=path)
 	file = xml_reader.get_file()
-	print(file)
 
 	comprobante = Comprobante()
-	node = comprobante.get_node()
-	fields = comprobante.get_fields()
+	name_comp = comprobante.get_name_node()
+	fields_comp = comprobante.get_fields()
 
-	print(node, fields)
+	node_comp = xml_reader.get_elements(name_comp)
+	data = xml_reader.get_data(node_comp, fields_comp)
+
+	print(data)
