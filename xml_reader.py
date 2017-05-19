@@ -29,6 +29,22 @@ class Base(object):
 			data.update({name: atribute})
 		return data
 
+	def list_attributes(self, node_xml, fields):
+		nodes = self._get_elements(node_xml)
+		
+		data = []
+		dic = {}
+		# Extraer datos del nodo.
+		for node in nodes:
+			# Recorrer lista de atributos.
+			for name in fields:
+				atribute = node.getAttribute(name)
+				# Actualizar diccionario.
+				dic.update({name: atribute})
+			# Agregar a la lista los diccionarios.
+			data.append(dic)
+		return data
+
 
 class XmlReader(Base):
 	"""
@@ -47,11 +63,15 @@ class XmlReader(Base):
 
 		return fields
 
-	def get_data(self):
+	def get_dict(self):
 		fields = self.get_fields()
 		_data = self.get_attributes(self.node, fields)
 		return _data
 
+	def get_list(self):
+		fields = self.get_fields()
+		_data = self.list_attributes(self.node, fields)
+		return _data
 		
 class Comprobante(XmlReader):
 	"""
@@ -99,7 +119,7 @@ class Deduccion(XmlReader):
 
 	map_fields = (
 		Field(attribute_name='Clave'),
-		Field(attribute_name='TipoPercepcion'),
+		Field(attribute_name='TipoDeduccion'),
 		Field(attribute_name='Concepto'),
 		Field(attribute_name='Importe'),
 	)
@@ -111,8 +131,7 @@ path = 'CFDI_v12.xml'
 # data = comprobante.get_data()
 # print(data)
 
-ded = Percepcion(path=path).get_data()
-print(ded)
+per = Percepcion(path=path).get_dict()
 
-ded = Deduccion(path=path).get_data()
+ded = Deduccion(path=path).get_list()
 print(ded)
