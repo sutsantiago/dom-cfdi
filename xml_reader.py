@@ -13,7 +13,7 @@ class Base(object):
 	def __init__(self, path=None):
 		self.doc = minidom.parse(path)
 
-	def get_elements(self, node):
+	def _get_elements(self, node):
 		return self.doc.getElementsByTagName(node)
 
 	def get_attributes(self, node, fields):
@@ -80,9 +80,39 @@ class Comprobante(XmlReader):
 	)
 
 
+class Percepcion(XmlReader):
+	"""docstring for ClassName"""
+	node = 'nomina12:Percepcion'
+
+	map_fields = (
+		Field(attribute_name='Clave'),
+		Field(attribute_name='TipoPercepcion'),
+		Field(attribute_name='Concepto'),
+		Field(attribute_name='ImporteGravado'),
+		Field(attribute_name='ImporteExento'),
+	)
+
+
+class Deduccion(XmlReader):
+	"""docstring for ClassName"""
+	node = 'nomina12:Deduccion'
+
+	map_fields = (
+		Field(attribute_name='Clave'),
+		Field(attribute_name='TipoPercepcion'),
+		Field(attribute_name='Concepto'),
+		Field(attribute_name='Importe'),
+	)
+
 
 path = 'CFDI_v12.xml'
-comprobante = Comprobante(path=path)
-data = comprobante.get_data()
 
-print(data)
+# comprobante = Comprobante(path=path)
+# data = comprobante.get_data()
+# print(data)
+
+ded = Percepcion(path=path).get_data()
+print(ded)
+
+ded = Deduccion(path=path).get_data()
+print(ded)
