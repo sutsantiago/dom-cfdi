@@ -17,14 +17,14 @@ class Base(object):
 		return self.doc.getElementsByTagName(node)
 
 	def get_attributes(self, node, fields):
-		data = []
+		data = {}
 		# Recorrer lista de atributos
 		for name in fields:
 			# Extraer datos con los nombres.
 			for item in node:
 				atribute = item.getAttribute(name)
 			# Agregar a la lista 
-			data.append({name: atribute})
+			data.update({name: atribute})
 		return data
 
 
