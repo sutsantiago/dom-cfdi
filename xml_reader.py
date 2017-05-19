@@ -7,17 +7,36 @@ class Field(object):
 
 
 class Base(object):
+
+	def get_fields(self):
+		fields = []
+
+		for field in self.map_fields:
+			name = getattr(field, 'attribute_name')
+			fields.append(name)
+
+		return fields
+
+	def get_node(self):
+		return self.node
+		
+
+class XmlReader(object):
 	"""
 	Clase base de XML.
 	"""
-	def __init__(self, path=None):
-		self.doc = minidom.parse(path)
 
-	def _get_elements(self, node):
-		return self.doc.getElementsByTagName(node)
+	def __init__(self, path=None):
+		self.document = minidom.parse(path)
+
+	def get_file(self):
+		return self.document
+
+	def get_elements(self, document):
+		return document.getElementsByTagName(node)
 
 	def get_attributes(self, node_xml, fields):
-		node = self._get_elements(node_xml)
+		node = self.get_elements(node_xml)
 
 		data = {}
 		# Recorrer lista de atributos
@@ -30,7 +49,7 @@ class Base(object):
 		return data
 
 	def list_attributes(self, node_xml, fields):
-		nodes = self._get_elements(node_xml)
+		nodes = self.get_elements(node_xml)
 		
 		data = []
 		dic = {}
@@ -46,34 +65,7 @@ class Base(object):
 		return data
 
 
-class XmlReader(Base):
-	"""
-	Clase para la lectura de XML
-	"""
-
-	def __init__(self, **kwargs):
-		super(XmlReader, self).__init__(**kwargs)
-
-	def get_fields(self):
-		fields = []
-
-		for field in self.map_fields:
-			name = getattr(field, 'attribute_name')
-			fields.append(name)
-
-		return fields
-
-	def get_dict(self):
-		fields = self.get_fields()
-		_data = self.get_attributes(self.node, fields)
-		return _data
-
-	def get_list(self):
-		fields = self.get_fields()
-		_data = self.list_attributes(self.node, fields)
-		return _data
-		
-class Comprobante(XmlReader):
+class Comprobante(Base):
 	"""
 	Nodo de comprobante
 	"""
@@ -100,7 +92,7 @@ class Comprobante(XmlReader):
 	)
 
 
-class Percepcion(XmlReader):
+class Percepcion(Base):
 	"""docstring for ClassName"""
 	node = 'nomina12:Percepcion'
 
@@ -113,7 +105,7 @@ class Percepcion(XmlReader):
 	)
 
 
-class Deduccion(XmlReader):
+class Deduccion(Base):
 	"""docstring for ClassName"""
 	node = 'nomina12:Deduccion'
 
@@ -125,13 +117,16 @@ class Deduccion(XmlReader):
 	)
 
 
-path = 'CFDI_v12.xml'
+class ParseXml(object):
 
-# comprobante = Comprobante(path=path)
-# data = comprobante.get_data()
-# print(data)
+	path = 'CFDI_v12.xml'
 
-per = Percepcion(path=path).get_dict()
+	xml_reader = XmlReader(path=path)
+	file = xml_reader.get_file()
+	print(file)
 
-ded = Deduccion(path=path).get_list()
-print(ded)
+	comprobante = Comprobante()
+	node = comprobante.get_node()
+	fields = comprobante.get_fields()
+
+	print(node, fields)
