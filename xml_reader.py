@@ -16,7 +16,9 @@ class Base(object):
 	def _get_elements(self, node):
 		return self.doc.getElementsByTagName(node)
 
-	def get_attributes(self, node, fields):
+	def get_attributes(self, node_xml, fields):
+		node = self._get_elements(node_xml)
+
 		data = {}
 		# Recorrer lista de atributos
 		for name in fields:
@@ -47,9 +49,7 @@ class XmlReader(Base):
 
 	def get_data(self):
 		fields = self.get_fields()
-		node = self.get_elements(self.node)
-
-		_data = self.get_attributes(node, fields)
+		_data = self.get_attributes(self.node, fields)
 		return _data
 
 		
