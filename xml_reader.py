@@ -61,8 +61,22 @@ class Comprobante(XmlReader):
 	node = 'cfdi:Comprobante'
 
 	map_fields = (
+		Field(attribute_name='version'),
+		Field(attribute_name='tipoDeComprobante'),
+		Field(attribute_name='fecha'),
 		Field(attribute_name='serie'),
 		Field(attribute_name='folio'),
+		Field(attribute_name='sello'),
+		Field(attribute_name='noCertificado'),
+		Field(attribute_name='certificado'),
+		Field(attribute_name='metodoDePago'),
+		Field(attribute_name='fomaDePago'),
+		Field(attribute_name='subTotal'),
+		Field(attribute_name='descuento'),
+		Field(attribute_name='total'),
+		Field(attribute_name='TipoCambio'),
+		Field(attribute_name='Moneda'),
+		Field(attribute_name='LugarExpedicion')
 	)
 
 
