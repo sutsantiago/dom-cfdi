@@ -122,6 +122,30 @@ class Receptor(Base):
 	def data(self):
 		_data = self.document.get_attributes(self.node, self.fields)
 		return _data
+
+
+class Concepto(Base):
+	"""
+	Nodo Emisor
+	"""
+	node_xml = 'cfdi:Concepto'
+
+	map_fields = (
+		Field(attribute_name='valorUnitario'),
+		Field(attribute_name='unidad'),
+		Field(attribute_name='cantidad'),
+		Field(attribute_name='descripcion'),
+		Field(attribute_name='importe'),
+	)
+
+	def __init__(self, document):
+		self.document = document
+		self.node = self.document.get_elements(self.node_xml)
+		self.fields = self.get_fields()
+
+	def data(self):
+		_data = self.document.get_attributes(self.node, self.fields)
+		return _data
 		
 
 class Percepcion(Base):
@@ -158,4 +182,5 @@ class ParseXml(object):
 	comprobante = Comprobante(document=document).data()
 	emisor = Emisor(document=document).data()
 	receptor = Receptor(document=document).data()
-	print(comprobante, emisor, receptor)
+	concepto =  Concepto(document=document).data()
+	print(comprobante, emisor, receptor, concepto)
