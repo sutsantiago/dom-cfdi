@@ -82,6 +82,47 @@ class Comprobante(Base):
 		return _data
 
 
+class Emisor(Base):
+	"""
+	Nodo Emisor
+	"""
+	node_xml = 'cfdi:Emisor'
+
+	map_fields = (
+		Field(attribute_name='rfc'),
+		Field(attribute_name='nombre'),
+	)
+
+	def __init__(self, document):
+		self.document = document
+		self.node = self.document.get_elements(self.node_xml)
+		self.fields = self.get_fields()
+
+	def data(self):
+		_data = self.document.get_attributes(self.node, self.fields)
+		return _data
+		
+
+class Receptor(Base):
+	"""
+	Nodo Emisor
+	"""
+	node_xml = 'cfdi:Receptor'
+
+	map_fields = (
+		Field(attribute_name='rfc'),
+		Field(attribute_name='nombre'),
+	)
+
+	def __init__(self, document):
+		self.document = document
+		self.node = self.document.get_elements(self.node_xml)
+		self.fields = self.get_fields()
+
+	def data(self):
+		_data = self.document.get_attributes(self.node, self.fields)
+		return _data
+		
 
 class Percepcion(Base):
 	"""docstring for ClassName"""
@@ -115,4 +156,6 @@ class ParseXml(object):
 	document = XmlReader(path=path)
 
 	comprobante = Comprobante(document=document).data()
-	print(comprobante)
+	emisor = Emisor(document=document).data()
+	receptor = Receptor(document=document).data()
+	print(comprobante, emisor, receptor)
