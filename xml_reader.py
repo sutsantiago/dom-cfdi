@@ -20,18 +20,7 @@ class XmlReader(object):
 	def get_elements(self, node_xml):
 		return self.document.getElementsByTagName(node_xml)
 
-	def get_data(self, node, fields):
-		data = {}
-		# Recorrer lista de atributos
-		for name in fields:
-			# Extraer datos con los nombres.
-			for nd in node:
-				atribute = nd.getAttribute(name)
-			# Agregar a la lista 
-			data.update({name: atribute})
-		return data
-
-	def list_data(self, nodes, fields):
+	def get_attributes(self, nodes, fields):
 		data = []
 		dic = {}
 		# Extraer datos del nodo.
@@ -57,16 +46,12 @@ class Base(object):
 
 		return fields
 
-	def get_name_node(self):
-		return self.node
-
 
 class Comprobante(Base):
 	"""
 	Nodo de comprobante
 	"""
-
-	node = 'cfdi:Comprobante'
+	node_xml = 'cfdi:Comprobante'
 
 	map_fields = (
 		Field(attribute_name='version'),
@@ -86,6 +71,16 @@ class Comprobante(Base):
 		Field(attribute_name='Moneda'),
 		Field(attribute_name='LugarExpedicion')
 	)
+
+	def __init__(self, document):
+		self.document = document
+		self.node = self.document.get_elements(self.node_xml)
+		self.fields = self.get_fields()
+
+	def data(self):
+		_data = self.document.get_attributes(self.node, self.fields)
+		return _data
+
 
 
 class Percepcion(Base):
@@ -117,14 +112,7 @@ class ParseXml(object):
 
 	path = 'CFDI_v12.xml'
 
-	xml_reader = XmlReader(path=path)
-	file = xml_reader.get_file()
+	document = XmlReader(path=path)
 
-	comprobante = Comprobante()
-	name_comp = comprobante.get_name_node()
-	fields_comp = comprobante.get_fields()
-
-	node_comp = xml_reader.get_elements(name_comp)
-	data = xml_reader.get_data(node_comp, fields_comp)
-
-	print(data)
+	comprobante = Comprobante(document=document).data()
+	print(comprobante)
