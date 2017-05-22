@@ -86,7 +86,7 @@ class Emisor(Base):
 	"""
 	Nodo Emisor
 	"""
-	node_xml = 'cfdi:Emisor'
+	node_xml = 'cfdi:Emisor' 
 
 	map_fields = (
 		Field(attribute_name='rfc'),
@@ -98,10 +98,17 @@ class Emisor(Base):
 		self.node = self.document.get_elements(self.node_xml)
 		self.fields = self.get_fields()
 
+	def get_regimen_fiscal(self):
+		data = {}
+		regimen_node = self.document.get_elements('cfdi:RegimenFiscal')
+		regimen = regimen_node[0].getAttribute('Regimen')
+		data['Regimen'] = regimen
+		return data
+
 	def data(self):
 		_data = self.document.get_attributes(self.node, self.fields)
 		return _data
-		
+	
 
 class Receptor(Base):
 	"""
