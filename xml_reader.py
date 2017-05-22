@@ -34,6 +34,16 @@ class XmlReader(object):
 			data.append(dic)
 		return data
 
+	def get_dict_attributes(self, node, fields):
+		data = {}
+		# Recorrer lista de atributos.
+		for name in fields:
+			# Extraer datos del nodo.
+			atribute = node[0].getAttribute(name)
+			# Actualizar diccionario.
+			data.update({name: atribute})
+		return data
+
 
 class Base(object):
 
@@ -78,7 +88,9 @@ class Comprobante(Base):
 		self.fields = self.get_fields()
 
 	def data(self):
-		_data = self.document.get_attributes(self.node, self.fields)
+		_data = self.document.get_dict_attributes(self.node, self.fields)
+		print('Comprobante', _data)
+
 		return _data
 
 
