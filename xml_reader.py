@@ -215,19 +215,40 @@ class NominaReceptor(Base):
 		Field(attribute_name='TipoJornada'),
 		Field(attribute_name='TipoContrato'),
 		Field(attribute_name='SalarioDiarioIntegrado'),
-		Field(attribute_name='SalarioBaseCotApor')
-		Field(attribute_name='RiesgoPuesto')
-		Field(attribute_name='Puesto')
-		Field(attribute_name='PeriodicidadPago')
-		Field(attribute_name='NumSeguridadSocial')
-		Field(attribute_name='NumEmpleado')
-		Field(attribute_name='FechaInicioRelLaboral')
-		Field(attribute_name='Departamento')
-		Field(attribute_name='Curp')
-		Field(attribute_name='CuentaBancaria')
-		Field(attribute_name='ClaveEntFed')
-		Field(attribute_name='Banco')
+		Field(attribute_name='SalarioBaseCotApor'),
+		Field(attribute_name='RiesgoPuesto'),
+		Field(attribute_name='Puesto'),
+		Field(attribute_name='PeriodicidadPago'),
+		Field(attribute_name='NumSeguridadSocial'),
+		Field(attribute_name='NumEmpleado'),
+		Field(attribute_name='FechaInicioRelLaboral'),
+		Field(attribute_name='Departamento'),
+		Field(attribute_name='Curp'),
+		Field(attribute_name='CuentaBancaria'),
+		Field(attribute_name='ClaveEntFed'),
+		Field(attribute_name='Banco'),
 		Field(attribute_name='Antigüedad')
+	)
+
+	def __init__(self, document):
+		self.document = document
+		self.node = self.document.get_elements(self.node_xml)
+		self.fields = self.get_fields()
+
+	def data(self):
+		_data = self.document.get_attributes(self.node, self.fields)
+		return _data
+
+class Percepciones(Base):
+	"""
+	Nodo de Nomina Emisor
+	"""
+	node_xml = 'nomina12:Percepciones'
+
+	map_fields = (
+		Field(attribute_name='TotalSueldos'),
+		Field(attribute_name='TotalGravado'),
+		Field(attribute_name='TotalExento'),
 	)
 
 	def __init__(self, document):
@@ -241,8 +262,10 @@ class NominaReceptor(Base):
 
 
 class Percepcion(Base):
-	"""docstring for ClassName"""
-	node = 'nomina12:Percepcion'
+	"""
+	Nodo de Percepcion
+	"""
+	node_xml = 'nomina12:Percepcion'
 
 	map_fields = (
 		Field(attribute_name='Clave'),
@@ -251,6 +274,15 @@ class Percepcion(Base):
 		Field(attribute_name='ImporteGravado'),
 		Field(attribute_name='ImporteExento'),
 	)
+
+	def __init__(self, document):
+		self.document = document
+		self.node = self.document.get_elements(self.node_xml)
+		self.fields = self.get_fields()
+
+	def data(self):
+		_data = self.document.get_attributes(self.node, self.fields)
+		return _data
 
 
 class Deduccion(Base):
@@ -277,10 +309,15 @@ class ParseXml(object):
 	concepto =  Concepto(document=document).data()
 	nomina = Nomina(document=document).data()
 	nomina_emisor =  NominaEmisor(document=document).data()
+	percepciones = Percepciones(document=document).data()
+	percepcion = Percepcion(document=document).data()
+
 	print(
 	comprobante,
 	emisor,
 	receptor,
 	concepto, 
 	nomina,
-	nomina_emisor)
+	nomina_emisor,
+	percepciones,
+	percepcion)
