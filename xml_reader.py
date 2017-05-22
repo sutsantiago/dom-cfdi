@@ -349,8 +349,31 @@ class OtroPago(Base):
 	def data(self):
 		_data = self.document.get_attributes(self.node, self.fields)
 		return _data
-		
 
+
+class TimbreFiscalDigital(Base):
+	"""
+	Nodo de Timbre Fiscal Digital
+	"""
+	node_xml = 'tfd:TimbreFiscalDigital'
+
+	map_fields = (
+		Field(attribute_name='selloSAT'),
+		Field(attribute_name='selloCFD'),
+		Field(attribute_name='noCertificadoSAT'),
+		Field(attribute_name='UUID'),
+		Field(attribute_name='FechaTimbrado')
+	)
+
+	def __init__(self, document):
+		self.document = document
+		self.node = self.document.get_elements(self.node_xml)
+		self.fields = self.get_fields()
+
+	def data(self):
+		_data = self.document.get_attributes(self.node, self.fields)
+		return _data
+		
 
 class ParseXml(object):
 
@@ -369,6 +392,7 @@ class ParseXml(object):
 	deducciones = Deducciones(document=document).data()
 	deduccion = Deduccion(document=document).data()
 	otro_pago = OtroPago(document=document).data()
+	timbre = TimbreFiscalDigital(document=document).data()
 	print(
 	comprobante,
 	emisor,
@@ -377,4 +401,4 @@ class ParseXml(object):
 	nomina,
 	nomina_emisor,
 	percepciones,
-	percepcion, deducciones, deduccion, otro_pago)
+	percepcion, deducciones, deduccion, otro_pago, timbre)
