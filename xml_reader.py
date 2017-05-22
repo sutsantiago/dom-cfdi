@@ -99,14 +99,15 @@ class Emisor(Base):
 		self.fields = self.get_fields()
 
 	def get_regimen_fiscal(self):
-		data = {}
-		regimen_node = self.document.get_elements('cfdi:RegimenFiscal')
-		regimen = regimen_node[0].getAttribute('Regimen')
-		data['Regimen'] = regimen
-		return data
+		reg_node = self.document.get_elements('cfdi:RegimenFiscal')
+		reg_fiscal = reg_node[0].getAttribute('Regimen')
+		return reg_fiscal
 
 	def data(self):
+		regimen = self.get_regimen_fiscal()
 		_data = self.document.get_attributes(self.node, self.fields)
+		# Agrega regimen Fiscal
+		_data[0]['Regimen'] = regimen
 		return _data
 	
 
@@ -239,6 +240,7 @@ class NominaReceptor(Base):
 		_data = self.document.get_attributes(self.node, self.fields)
 		return _data
 
+
 class Percepciones(Base):
 	"""
 	Nodo de Nomina Emisor
@@ -346,8 +348,15 @@ class OtroPago(Base):
 		self.node = self.document.get_elements(self.node_xml)
 		self.fields = self.get_fields()
 
+	def get_subsidio_empleao(self):
+		subsidio_node = self.document.get_elements('nomina12:SubsidioAlEmpleo')
+		subsidio = subsidio_node[0].getAttribute('SubsidioCausado')
+		return subsidio
+
 	def data(self):
+		sub_causado = self.get_subsidio_empleao()
 		_data = self.document.get_attributes(self.node, self.fields)
+		_data[0]['SubsidioCausado'] = sub_causado
 		return _data
 
 
