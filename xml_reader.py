@@ -285,9 +285,31 @@ class Percepcion(Base):
 		return _data
 
 
+class Deducciones(Base):
+	"""
+	Nodo de Deducciones
+	"""
+	node_xml = 'nomina12:Deducciones'
+
+	map_fields = (
+		Field(attribute_name='TotalOtrasDeducciones'),
+	)
+
+	def __init__(self, document):
+		self.document = document
+		self.node = self.document.get_elements(self.node_xml)
+		self.fields = self.get_fields()
+
+	def data(self):
+		_data = self.document.get_attributes(self.node, self.fields)
+		return _data
+
+
 class Deduccion(Base):
-	"""docstring for ClassName"""
-	node = 'nomina12:Deduccion'
+	"""
+	Nodo de Deduccion
+	"""
+	node_xml = 'nomina12:Deduccion'
 
 	map_fields = (
 		Field(attribute_name='Clave'),
@@ -295,6 +317,15 @@ class Deduccion(Base):
 		Field(attribute_name='Concepto'),
 		Field(attribute_name='Importe'),
 	)
+
+	def __init__(self, document):
+		self.document = document
+		self.node = self.document.get_elements(self.node_xml)
+		self.fields = self.get_fields()
+
+	def data(self):
+		_data = self.document.get_attributes(self.node, self.fields)
+		return _data
 
 
 class ParseXml(object):
@@ -311,6 +342,8 @@ class ParseXml(object):
 	nomina_emisor =  NominaEmisor(document=document).data()
 	percepciones = Percepciones(document=document).data()
 	percepcion = Percepcion(document=document).data()
+	deducciones = Deducciones(document=document).data()
+	deduccion = Deduccion(document=document).data()
 
 	print(
 	comprobante,
@@ -320,4 +353,4 @@ class ParseXml(object):
 	nomina,
 	nomina_emisor,
 	percepciones,
-	percepcion)
+	percepcion, deducciones, deduccion)
