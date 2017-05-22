@@ -20,7 +20,19 @@ class XmlReader(object):
 	def get_elements(self, node_xml):
 		return self.document.getElementsByTagName(node_xml)
 
-	def get_attributes(self, nodes, fields):
+	def get_attribute(self, node, field=None):
+		"""
+		Retorna un atributo en especifico.
+		"""
+		data = {}
+		atribute = node[0].getAttribute(field)
+		data[field] = atribute
+		return data
+
+	def get_list_attributes(self, nodes, fields=[]):
+		"""
+		Retorna lista de atributos.
+		"""
 		data = []
 		dic = {}
 		# Extraer datos del nodo.
@@ -34,7 +46,10 @@ class XmlReader(object):
 			data.append(dic)
 		return data
 
-	def get_dict_attributes(self, node, fields):
+	def get_dict_attributes(self, node, fields=[]):
+		"""
+		Retorna diccionario de atributos.
+		"""
 		data = {}
 		# Recorrer lista de atributos.
 		for name in fields:
@@ -61,7 +76,7 @@ class Comprobante(Base):
 	"""
 	Nodo de comprobante
 	"""
-	node_xml = 'cfdi:Comprobante'
+	NODE_XML = 'cfdi:Comprobante'
 
 	map_fields = (
 		Field(attribute_name='version'),
@@ -84,21 +99,20 @@ class Comprobante(Base):
 
 	def __init__(self, document):
 		self.document = document
-		self.node = self.document.get_elements(self.node_xml)
+		self.node = self.document.get_elements(self.NODE_XML)
 		self.fields = self.get_fields()
 
+	@property
 	def data(self):
-		_data = self.document.get_dict_attributes(self.node, self.fields)
-		print('Comprobante', _data)
-
-		return _data
+		data = self.document.get_dict_attributes(self.node, self.fields)
+		return data
 
 
 class Emisor(Base):
 	"""
 	Nodo Emisor
 	"""
-	node_xml = 'cfdi:Emisor' 
+	NODE_XML = 'cfdi:Emisor' 
 
 	map_fields = (
 		Field(attribute_name='rfc'),
@@ -107,27 +121,27 @@ class Emisor(Base):
 
 	def __init__(self, document):
 		self.document = document
-		self.node = self.document.get_elements(self.node_xml)
+		self.node = self.document.get_elements(self.NODE_XML)
 		self.fields = self.get_fields()
 
 	def get_regimen_fiscal(self):
-		reg_node = self.document.get_elements('cfdi:RegimenFiscal')
-		reg_fiscal = reg_node[0].getAttribute('Regimen')
+		regfis_node = self.document.get_elements('cfdi:RegimenFiscal')
+		reg_fiscal = self.document.get_attribute(regfis_node, 'Regimen')
 		return reg_fiscal
 
 	def data(self):
 		regimen = self.get_regimen_fiscal()
-		_data = self.document.get_attributes(self.node, self.fields)
+		data = self.document.get_dict_attributes(self.node, self.fields)
 		# Agrega regimen Fiscal
-		_data[0]['Regimen'] = regimen
-		return _data
+		data['regimen_fiscal'] = regimen
+		return data
 	
 
 class Receptor(Base):
 	"""
 	Nodo Emisor
 	"""
-	node_xml = 'cfdi:Receptor'
+	NODE_XML = 'cfdi:Receptor'
 
 	map_fields = (
 		Field(attribute_name='rfc'),
@@ -136,19 +150,19 @@ class Receptor(Base):
 
 	def __init__(self, document):
 		self.document = document
-		self.node = self.document.get_elements(self.node_xml)
+		self.node = self.document.get_elements(self.NODE_XML)
 		self.fields = self.get_fields()
 
 	def data(self):
-		_data = self.document.get_attributes(self.node, self.fields)
-		return _data
+		data = self.document.get_dict_attributes(self.node, self.fields)
+		return data
 
 
 class Concepto(Base):
 	"""
 	Nodo Emisor
 	"""
-	node_xml = 'cfdi:Concepto'
+	NODE_XML = 'cfdi:Concepto'
 
 	map_fields = (
 		Field(attribute_name='valorUnitario'),
@@ -160,19 +174,19 @@ class Concepto(Base):
 
 	def __init__(self, document):
 		self.document = document
-		self.node = self.document.get_elements(self.node_xml)
+		self.node = self.document.get_elements(self.NODE_XML)
 		self.fields = self.get_fields()
 
 	def data(self):
-		_data = self.document.get_attributes(self.node, self.fields)
-		return _data
+		data = self.document.get_dict_attributes(self.node, self.fields)
+		return data
 		
 
 class Nomina(Base):
 	"""
 	Nodo de Nomina
 	"""
-	node_xml = 'nomina12:Nomina'
+	NODE_XML = 'nomina12:Nomina'
 
 	map_fields = (
 		Field(attribute_name='Version'),
@@ -188,19 +202,19 @@ class Nomina(Base):
 
 	def __init__(self, document):
 		self.document = document
-		self.node = self.document.get_elements(self.node_xml)
+		self.node = self.document.get_elements(self.NODE_XML)
 		self.fields = self.get_fields()
 
 	def data(self):
-		_data = self.document.get_attributes(self.node, self.fields)
-		return _data
+		data = self.document.get_dict_attributes(self.node, self.fields)
+		return data
 
 
 class NominaEmisor(Base):
 	"""
 	Nodo de Nomina Emisor
 	"""
-	node_xml = 'nomina12:Emisor'
+	NODE_XML = 'nomina12:Emisor'
 
 	map_fields = (
 		Field(attribute_name='RfcPatronOrigen'),
@@ -209,19 +223,19 @@ class NominaEmisor(Base):
 
 	def __init__(self, document):
 		self.document = document
-		self.node = self.document.get_elements(self.node_xml)
+		self.node = self.document.get_elements(self.NODE_XML)
 		self.fields = self.get_fields()
 
 	def data(self):
-		_data = self.document.get_attributes(self.node, self.fields)
-		return _data
+		data = self.document.get_dict_attributes(self.node, self.fields)
+		return data
 
 
 class NominaReceptor(Base):
 	"""
 	Nodo de Nomina Receptor
 	"""
-	node_xml = 'nomina12:Receptor'
+	NODE_XML = 'nomina12:Receptor'
 
 	map_fields = (
 		Field(attribute_name='TipoRegimen'),
@@ -245,19 +259,19 @@ class NominaReceptor(Base):
 
 	def __init__(self, document):
 		self.document = document
-		self.node = self.document.get_elements(self.node_xml)
+		self.node = self.document.get_elements(self.NODE_XML)
 		self.fields = self.get_fields()
 
 	def data(self):
-		_data = self.document.get_attributes(self.node, self.fields)
-		return _data
+		data = self.document.get_dict_attributes(self.node, self.fields)
+		return data
 
 
 class Percepciones(Base):
 	"""
 	Nodo de Nomina Emisor
 	"""
-	node_xml = 'nomina12:Percepciones'
+	NODE_XML = 'nomina12:Percepciones'
 
 	map_fields = (
 		Field(attribute_name='TotalSueldos'),
@@ -267,19 +281,19 @@ class Percepciones(Base):
 
 	def __init__(self, document):
 		self.document = document
-		self.node = self.document.get_elements(self.node_xml)
+		self.node = self.document.get_elements(self.NODE_XML)
 		self.fields = self.get_fields()
 
 	def data(self):
-		_data = self.document.get_attributes(self.node, self.fields)
-		return _data
+		data = self.document.get_dict_attributes(self.node, self.fields)
+		return data
 
 
 class Percepcion(Base):
 	"""
 	Nodo de Percepcion
 	"""
-	node_xml = 'nomina12:Percepcion'
+	NODE_XML = 'nomina12:Percepcion'
 
 	map_fields = (
 		Field(attribute_name='Clave'),
@@ -291,19 +305,19 @@ class Percepcion(Base):
 
 	def __init__(self, document):
 		self.document = document
-		self.node = self.document.get_elements(self.node_xml)
+		self.node = self.document.get_elements(self.NODE_XML)
 		self.fields = self.get_fields()
 
 	def data(self):
-		_data = self.document.get_attributes(self.node, self.fields)
-		return _data
+		data = self.document.get_list_attributes(self.node, self.fields)
+		return data
 
 
 class Deducciones(Base):
 	"""
 	Nodo de Deducciones
 	"""
-	node_xml = 'nomina12:Deducciones'
+	NODE_XML = 'nomina12:Deducciones'
 
 	map_fields = (
 		Field(attribute_name='TotalOtrasDeducciones'),
@@ -311,19 +325,19 @@ class Deducciones(Base):
 
 	def __init__(self, document):
 		self.document = document
-		self.node = self.document.get_elements(self.node_xml)
+		self.node = self.document.get_elements(self.NODE_XML)
 		self.fields = self.get_fields()
 
 	def data(self):
-		_data = self.document.get_attributes(self.node, self.fields)
-		return _data
+		data = self.document.get_dict_attributes(self.node, self.fields)
+		return data
 
 
 class Deduccion(Base):
 	"""
 	Nodo de Deduccion
 	"""
-	node_xml = 'nomina12:Deduccion'
+	NODE_XML = 'nomina12:Deduccion'
 
 	map_fields = (
 		Field(attribute_name='Clave'),
@@ -334,19 +348,19 @@ class Deduccion(Base):
 
 	def __init__(self, document):
 		self.document = document
-		self.node = self.document.get_elements(self.node_xml)
+		self.node = self.document.get_elements(self.NODE_XML)
 		self.fields = self.get_fields()
 
 	def data(self):
-		_data = self.document.get_attributes(self.node, self.fields)
-		return _data
+		data = self.document.get_list_attributes(self.node, self.fields)
+		return data
 
 
 class OtroPago(Base):
 	"""
 	Nodo de OtroPago
 	"""
-	node_xml = 'nomina12:OtroPago'
+	NODE_XML = 'nomina12:OtroPago'
 
 	map_fields = (
 		Field(attribute_name='Clave'),
@@ -357,26 +371,26 @@ class OtroPago(Base):
 
 	def __init__(self, document):
 		self.document = document
-		self.node = self.document.get_elements(self.node_xml)
+		self.node = self.document.get_elements(self.NODE_XML)
 		self.fields = self.get_fields()
 
 	def get_subsidio_empleao(self):
 		subsidio_node = self.document.get_elements('nomina12:SubsidioAlEmpleo')
-		subsidio = subsidio_node[0].getAttribute('SubsidioCausado')
+		subsidio = self.document.get_attribute(subsidio_node, 'SubsidioCausado')
 		return subsidio
 
 	def data(self):
 		sub_causado = self.get_subsidio_empleao()
-		_data = self.document.get_attributes(self.node, self.fields)
-		_data[0]['SubsidioCausado'] = sub_causado
-		return _data
+		data = self.document.get_list_attributes(self.node, self.fields)
+		data[0]['subsidio_empleo'] = sub_causado
+		return data
 
 
 class TimbreFiscalDigital(Base):
 	"""
 	Nodo de Timbre Fiscal Digital
 	"""
-	node_xml = 'tfd:TimbreFiscalDigital'
+	NODE_XML = 'tfd:TimbreFiscalDigital'
 
 	map_fields = (
 		Field(attribute_name='selloSAT'),
@@ -388,12 +402,12 @@ class TimbreFiscalDigital(Base):
 
 	def __init__(self, document):
 		self.document = document
-		self.node = self.document.get_elements(self.node_xml)
+		self.node = self.document.get_elements(self.NODE_XML)
 		self.fields = self.get_fields()
 
 	def data(self):
-		_data = self.document.get_attributes(self.node, self.fields)
-		return _data
+		data = self.document.get_dict_attributes(self.node, self.fields)
+		return data
 		
 
 class ParseXml(object):
@@ -402,7 +416,9 @@ class ParseXml(object):
 
 	document = XmlReader(path=path)
 
-	comprobante = Comprobante(document=document).data()
+	comprobante = Comprobante(document=document)
+	comp_data = comprobante.data
+
 	emisor = Emisor(document=document).data()
 	receptor = Receptor(document=document).data()
 	concepto =  Concepto(document=document).data()
@@ -415,7 +431,7 @@ class ParseXml(object):
 	otro_pago = OtroPago(document=document).data()
 	timbre = TimbreFiscalDigital(document=document).data()
 	print(
-	comprobante,
+	comp_data,
 	emisor,
 	receptor,
 	concepto, 
