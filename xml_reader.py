@@ -328,6 +328,30 @@ class Deduccion(Base):
 		return _data
 
 
+class OtroPago(Base):
+	"""
+	Nodo de OtroPago
+	"""
+	node_xml = 'nomina12:OtroPago'
+
+	map_fields = (
+		Field(attribute_name='Clave'),
+		Field(attribute_name='TipoOtroPago'),
+		Field(attribute_name='Concepto'),
+		Field(attribute_name='Importe'),
+	)
+
+	def __init__(self, document):
+		self.document = document
+		self.node = self.document.get_elements(self.node_xml)
+		self.fields = self.get_fields()
+
+	def data(self):
+		_data = self.document.get_attributes(self.node, self.fields)
+		return _data
+		
+
+
 class ParseXml(object):
 
 	path = 'CFDI_v12.xml'
@@ -344,7 +368,7 @@ class ParseXml(object):
 	percepcion = Percepcion(document=document).data()
 	deducciones = Deducciones(document=document).data()
 	deduccion = Deduccion(document=document).data()
-
+	otro_pago = OtroPago(document=document).data()
 	print(
 	comprobante,
 	emisor,
@@ -353,4 +377,4 @@ class ParseXml(object):
 	nomina,
 	nomina_emisor,
 	percepciones,
-	percepcion, deducciones, deduccion)
+	percepcion, deducciones, deduccion, otro_pago)
