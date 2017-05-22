@@ -157,7 +157,7 @@ class Concepto(Base):
 
 class Nomina(Base):
 	"""
-	Nodo de  Nomina
+	Nodo de Nomina
 	"""
 	node_xml = 'nomina12:Nomina'
 
@@ -181,7 +181,28 @@ class Nomina(Base):
 	def data(self):
 		_data = self.document.get_attributes(self.node, self.fields)
 		return _data
-		
+
+
+class NominaEmisor(Base):
+	"""
+	Nodo de Nomina Emisor
+	"""
+	node_xml = 'nomina12:Emisor'
+
+	map_fields = (
+		Field(attribute_name='RfcPatronOrigen'),
+		Field(attribute_name='RegistroPatronal'),
+	)
+
+	def __init__(self, document):
+		self.document = document
+		self.node = self.document.get_elements(self.node_xml)
+		self.fields = self.get_fields()
+
+	def data(self):
+		_data = self.document.get_attributes(self.node, self.fields)
+		return _data
+
 
 class Percepcion(Base):
 	"""docstring for ClassName"""
@@ -219,9 +240,11 @@ class ParseXml(object):
 	receptor = Receptor(document=document).data()
 	concepto =  Concepto(document=document).data()
 	nomina = Nomina(document=document).data()
+	nomina_emisor =  NominaEmisor(document=document).data()
 	print(
 	comprobante,
 	emisor,
 	receptor,
 	concepto, 
-	nomina)
+	nomina,
+	nomina_emisor)
