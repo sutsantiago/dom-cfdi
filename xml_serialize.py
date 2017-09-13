@@ -371,9 +371,16 @@ class TimbreFiscalDigital(Base):
 		self.node = self.document.get_elements(self.NODE_XML)
 		self.fields = self.get_fields()
 
+	def get_timbre(self):
+		try:
+			return self.document.get_dict_attributes(self.node, self.fields)
+		except IndexError:
+			pass
+
 	@property
 	def data(self):
-		data = self.document.get_dict_attributes(self.node, self.fields)
+		data = []
+		data = self.get_timbre()
 		return data
 		
 
