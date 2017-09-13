@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*- 
 from xml_reader import XmlReader
 
 
@@ -16,6 +18,7 @@ class Base(object):
 			fields.append(name)
 
 		return fields
+
 
 class Comprobante(Base):
 	"""
@@ -330,15 +333,22 @@ class OtroPago(Base):
 		self.fields = self.get_fields()
 
 	def get_subsidio_empleao(self):
-		subsidio_node = self.document.get_elements('nomina12:SubsidioAlEmpleo')
-		subsidio = self.document.get_attribute(subsidio_node, 'SubsidioCausado')
-		return subsidio
+		try:
+			subsidio_node = self.document.get_elements('nomina12:SubsidioAlEmpleo')
+			subsidio = self.document.get_attribute(subsidio_node, 'SubsidioCausado')
+			return subsidio
+		except IndexError:
+			pass
+		except AttributeError:
+			return None
 
 	@property
 	def data(self):
+		data = []
 		sub_causado = self.get_subsidio_empleao()
-		data = self.document.get_list_attributes(self.node, self.fields)
-		data[0]['subsidio_empleo'] = sub_causado
+		if sub_causado:
+			data = self.document.get_list_attributes(self.node, self.fields)
+			data[0]['subsidio_empleo'] = sub_causado
 		return data
 
 
@@ -368,8 +378,6 @@ class TimbreFiscalDigital(Base):
 		
 
 class XmlSerialize(object):
-
-
 
 	def get_serializer(self, document):	
 		cfdi = {}
@@ -401,5 +409,5 @@ class XmlSerialize(object):
 		cfdi['deduccion'] = deduccion.data
 		cfdi['otro_pago'] = otro_pago.data
 		cfdi['timbre'] = timbre.data
-
+		print(cfdi)
 		return cfdi
