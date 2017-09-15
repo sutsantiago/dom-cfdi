@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*- 
-from xml_reader import XmlReader
 
 
 class Field(object):
@@ -36,7 +35,7 @@ class Comprobante(Base):
 		Field(attribute_name='noCertificado'),
 		Field(attribute_name='certificado'),
 		Field(attribute_name='metodoDePago'),
-		Field(attribute_name='fomaDePago'),
+		Field(attribute_name='formaDePago'),
 		Field(attribute_name='subTotal'),
 		Field(attribute_name='descuento'),
 		Field(attribute_name='total'),
